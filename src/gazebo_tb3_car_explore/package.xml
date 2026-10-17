@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>gazebo_tb3_car_explore</name>
+  <version>1.0.0</version>
+  <description>
+    Gazebo 无人车（TurtleBot3 waffle_pi）激光雷达自主探索建图模块：
+    在 task3_world 世界中用自研 "扇区势场逃逸" 探索器驱动差速无人车，
+    配合 hutb_robotics_sim 的 lidar_slam 完成大范围栅格建图，
+    并提供一键 launch 与运行数据采集脚本。
+  </description>
+
+  <maintainer email="lb@hutb.edu.cn">lb</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf</depend>
+
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>turtlebot3_gazebo</exec_depend>
+  <exec_depend>turtlebot3_description</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>hutb_robotics_sim</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+</package>

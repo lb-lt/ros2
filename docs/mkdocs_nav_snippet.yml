@@ -1,0 +1,15 @@
+# mkdocs.yml 导航片段
+#
+# 把下面一行加入上游 OpenHUTB/ros2 仓库 mkdocs.yml 的
+# 「地面运动」(- 地面运动:) 小节，放在最后一项之后即可。
+# 上游对应位置形如：
+#
+#   - 地面运动:
+#       - 手动控制: './set_up_and_connect_to_carla.md'
+#       ...
+#       - 神经网络自适应驾驶(ACC): './ground/carla_nn_car_following.md'
+#       - Gazebo 无人车激光雷达自主探索建图: './ground/gazebo_tb3_car_explore.md'   <-- 新增
+#
+# 缩进需与同级条目保持一致（6 个空格）。
+
+      - Gazebo 无人车激光雷达自主探索建图: './ground/gazebo_tb3_car_explore.md'

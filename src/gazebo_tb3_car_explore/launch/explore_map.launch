@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- ============================================================
+       Gazebo 无人车：激光雷达自主探索建图
+       ============================================================
+       TurtleBot3 waffle_pi（差速驱动 + 360 度激光雷达）在
+       task3_world.world 中由 explore_mapping 节点自主漫游，
+       lidar_slam 节点在线构建栅格地图并发布 /map。
+
+       用法:
+         roslaunch gazebo_tb3_car_explore explore_map.launch
+         roslaunch gazebo_tb3_car_explore explore_map.launch use_rviz:=false
+         roslaunch gazebo_tb3_car_explore explore_map.launch linear_speed:=0.22
+       ============================================================ -->
+  <env name="TURTLEBOT3_MODEL" value="waffle_pi"/>
+
+  <arg name="use_rviz"      default="true"/>
+  <arg name="paused"        default="false"/>
+  <arg name="verbose"       default="false"/>
+  <arg name="linear_speed"  default="0.18" doc="巡航线速度 m/s"/>
+  <arg name="turn_speed"    default="0.9"  doc="逃逸时原地转向角速度 rad/s"/>
+  <arg name="safe_distance" default="0.55" doc="触发逃逸的正前方距离 m"/>
+  <arg name="world" default="$(find hutb_robotics_sim)/worlds/task3_world.world"/>
+
+  <!-- Gazebo 仿真环境（自带障碍物场景，无需联网下载模型） -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world)"/>
+    <arg name="paused"     value="$(arg paused)"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui"        value="true"/>
+    <arg name="headless"   value="false"/>
+    <arg name="debug"      value="false"/>
+    <arg name="verbose"    value="$(arg verbose)"/>
+  </include>
+
+  <!-- 无人车模型：激光雷达 + 差速驱动 -->
+  <param name="robot_description"
+         command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_waffle_pi.urdf.xacro"/>
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"
+        args="-urdf -model turtlebot3_waffle_pi -x -0.5 -y -0.5 -z 0.05 -param robot_description"/>
+
+  <!-- 关节状态与 TF -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher"
+        name="robot_state_publisher" output="screen"/>
+
+  <!-- 自研探索器：激光扇区 + 势场逃逸 -->
+  <node name="explore_mapping" pkg="gazebo_tb3_car_explore"
+        type="explore_mapping.py" output="screen">
+    <param name="linear_speed"  value="$(arg linear_speed)"/>
+    <param name="turn_speed"    value="$(arg turn_speed)"/>
+    <param name="safe_distance" value="$(arg safe_distance)"/>
+  </node>
+
+  <!-- 在线栅格 SLAM（复用课程 hutb_robotics_sim 的实现） -->
+  <node name="lidar_slam" pkg="hutb_robotics_sim" type="lidar_slam.py" output="screen">
+    <param name="match_enabled" value="false"/>
+  </node>
+
+  <!-- RViz 可视化：地图 + 激光 + 机器人 -->
+  <node name="rviz" pkg="rviz" type="rviz" if="$(arg use_rviz)"
+        args="-d $(find gazebo_tb3_car_explore)/rviz/explore.rviz"/>
+</launch>
