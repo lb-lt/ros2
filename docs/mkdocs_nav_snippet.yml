@@ -1,15 +1,34 @@
-# mkdocs.yml 导航片段
-#
-# 把下面一行加入上游 OpenHUTB/ros2 仓库 mkdocs.yml 的
-# 「地面运动」(- 地面运动:) 小节，放在最后一项之后即可。
-# 上游对应位置形如：
-#
-#   - 地面运动:
-#       - 手动控制: './set_up_and_connect_to_carla.md'
-#       ...
-#       - 神经网络自适应驾驶(ACC): './ground/carla_nn_car_following.md'
-#       - Gazebo 无人车激光雷达自主探索建图: './ground/gazebo_tb3_car_explore.md'   <-- 新增
-#
-# 缩进需与同级条目保持一致（6 个空格）。
+# mkdocs.yml 导航条目（已应用）
 
-      - Gazebo 无人车激光雷达自主探索建图: './ground/gazebo_tb3_car_explore.md'
+本模块的导航条目**已经加入仓库根目录的 `mkdocs.yml`**，
+位于「地面载具」小节末尾（紧接 `RVIZ Carla 插件` 之后）：
+
+```yaml
+    - Gazebo 无人车激光雷达自主探索建图: './ground/gazebo_tb3_car_explore.md'
+```
+
+要点：
+
+* 所属小节名为 **`地面载具`**（不是「地面运动」）
+* 缩进 **4 个空格**，与同级条目对齐
+* 路径用单引号，以 `./` 开头
+
+修改后的效果：
+
+```yaml
+- 地面载具:
+    - 手动控制: './set_up_and_connect_to_carla.md'
+    - 生成对象: './ground/carla_spawn_objects.md'
+    - 阿克曼控制: './ground/ackermann_control.md'
+    - 路径点发布器: './ground/waypoint.md'
+    - 自动驾驶代理: './ground/ad_agent.md'
+    - 自动驾驶示例: './ground/ad_demo.md'
+    - ROS Scenario Runner: './ground/ros_scenario_runner.md'
+    - 扭转控制: './ground/twist_to_control.md'
+    - RVIZ Carla 插件: './ground/rviz_plugin.md'
+    - Gazebo 无人车激光雷达自主探索建图: './ground/gazebo_tb3_car_explore.md'   # 新增
+- 空域载具:
+```
+
+如果与上游 `OpenHUTB/ros2` 合并时出现冲突，只需把这一行重新插入到
+「地面载具」小节末尾即可，其余条目无需改动。
